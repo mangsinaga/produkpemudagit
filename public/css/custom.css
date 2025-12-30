@@ -245,8 +245,9 @@ a:hover {
 
 /* Search icon */
 .search-icon a img,
+.search-icon.header__search.header-search-btn a img,
 .vl-btn-wrap .icons a img {
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1) !important;
 }
 
 /* Background sections */
