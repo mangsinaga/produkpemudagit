@@ -395,7 +395,7 @@
         </div>
       </div>
       <div class="row">
-        <% products.slice(0, 6).forEach((product, index) => { %>
+        <% (products || []).slice(0, 6).forEach((product, index) => { %>
         <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="<%= 800 + (index * 200) %>">
           <div class="project-single-boxarea2">
             <div class="img1 image-anime">
