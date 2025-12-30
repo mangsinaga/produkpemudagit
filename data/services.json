@@ -10,7 +10,10 @@
     "categoryId": 1,
     "categoryTag": "#Minuman Tradisional",
     "status": "available",
-    "tags": [1, 2],
+    "tags": [
+      1,
+      2
+    ],
     "seo": {
       "metaTitle": "Minuman Asem Jawa - Produk Pemuda Santara",
       "metaDescription": "Minuman tradisional Asem Jawa dengan cita rasa khas, diolah secara higienis dan dikemas modern.",
@@ -35,7 +38,10 @@
     "categoryId": 1,
     "categoryTag": "#Pemanis Alami",
     "status": "available",
-    "tags": [1, 3],
+    "tags": [
+      1,
+      3
+    ],
     "seo": {
       "metaTitle": "Gula Jawa Premium - Produk Pemuda Santara",
       "metaDescription": "Gula Jawa premium berkualitas tinggi, pemanis alami untuk kebutuhan dapur dan kuliner.",
@@ -60,7 +66,9 @@
     "categoryId": 2,
     "categoryTag": "#Makanan Ringan",
     "status": "coming",
-    "tags": [4],
+    "tags": [
+      4
+    ],
     "seo": {
       "metaTitle": "Keripik Nusantara - Produk Pemuda Santara",
       "metaDescription": "Produk camilan keripik berkualitas tinggi, segera hadir dari Produk Pemuda Santara.",
@@ -80,12 +88,14 @@
     "slug": "produk-skincare",
     "shortDescription": "Mengembangkan produk perawatan kulit berbahan aman dan berkualitas untuk memenuhi permintaan pasar yang terus berkembang.",
     "content": "<p>Produk skincare kami akan hadir dengan formula yang aman dan berkualitas. Dikembangkan dengan bahan-bahan alami untuk memenuhi kebutuhan perawatan kulit Anda.</p>",
-    "featuredImage": "/img/all-images/project/project-img20.png",
+    "featuredImage": "/img/all-images/project/project-img13.png",
     "icon": "/img/icons/service16.svg",
     "categoryId": 3,
     "categoryTag": "#Kecantikan",
     "status": "future",
-    "tags": [4],
+    "tags": [
+      4
+    ],
     "seo": {
       "metaTitle": "Produk Skincare - Produk Pemuda Santara",
       "metaDescription": "Produk perawatan kulit berbahan aman dan berkualitas dari Produk Pemuda Santara.",
@@ -97,7 +107,7 @@
     "order": 4,
     "published": true,
     "createdAt": "2024-01-01",
-    "updatedAt": "2024-01-01"
+    "updatedAt": "2025-12-30"
   },
   {
     "id": 5,
@@ -105,12 +115,14 @@
     "slug": "jasa-pembuatan-aplikasi",
     "shortDescription": "Masuk ke sektor digital melalui pengembangan aplikasi dan solusi teknologi sebagai bentuk diversifikasi usaha jangka panjang.",
     "content": "<p>Layanan pengembangan aplikasi dan solusi digital untuk membantu bisnis bertransformasi di era digital. Kami menyediakan jasa pembuatan aplikasi mobile dan web.</p>",
-    "featuredImage": "/img/all-images/project/project-img21.png",
+    "featuredImage": "/img/all-images/project/project-img16.png",
     "icon": "/img/icons/service16.svg",
     "categoryId": 4,
     "categoryTag": "#Teknologi",
     "status": "future",
-    "tags": [4],
+    "tags": [
+      4
+    ],
     "seo": {
       "metaTitle": "Jasa Pembuatan Aplikasi - Produk Pemuda Santara",
       "metaDescription": "Layanan pengembangan aplikasi dan solusi digital dari Produk Pemuda Santara.",
@@ -122,7 +134,7 @@
     "order": 5,
     "published": true,
     "createdAt": "2024-01-01",
-    "updatedAt": "2024-01-01"
+    "updatedAt": "2025-12-30"
   },
   {
     "id": 6,
@@ -130,12 +142,14 @@
     "slug": "solusi-digital-bisnis",
     "shortDescription": "Layanan konsultasi dan pengembangan solusi digital untuk membantu bisnis bertransformasi di era digital.",
     "content": "<p>Kami menyediakan layanan konsultasi dan pengembangan solusi digital untuk membantu bisnis Anda bertransformasi dan berkembang di era digital.</p>",
-    "featuredImage": "/img/all-images/project/project-img22.png",
+    "featuredImage": "/img/all-images/project/project-img17.png",
     "icon": "/img/icons/service17.svg",
     "categoryId": 4,
     "categoryTag": "#Teknologi",
     "status": "future",
-    "tags": [4],
+    "tags": [
+      4
+    ],
     "seo": {
       "metaTitle": "Solusi Digital Bisnis - Produk Pemuda Santara",
       "metaDescription": "Layanan konsultasi dan pengembangan solusi digital dari Produk Pemuda Santara.",
@@ -147,6 +161,6 @@
     "order": 6,
     "published": true,
     "createdAt": "2024-01-01",
-    "updatedAt": "2024-01-01"
+    "updatedAt": "2025-12-30"
   }
 ]

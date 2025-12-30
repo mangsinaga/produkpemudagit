@@ -7,7 +7,7 @@
 }
 
 .homepage5-body .vl-transparent-header .vl-logo img {
-  filter: none !important;
+  filter: brightness(1) !important;
 }
 
 .homepage5-body .vl-main-menu ul > li > a {
@@ -24,12 +24,22 @@
 }
 
 .homepage5-body .vl-transparent-header .vl-hero-btn .head-btn ul li a {
-  background: var(--primary-color) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: var(--white) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.homepage5-body .vl-transparent-header .vl-hero-btn .head-btn ul li a i {
   color: var(--white) !important;
 }
 
 .homepage5-body .vl-transparent-header .vl-hero-btn .head-btn ul li a:hover {
   background: var(--accent-color) !important;
+  color: var(--primary-color) !important;
+  border-color: var(--accent-color) !important;
+}
+
+.homepage5-body .vl-transparent-header .vl-hero-btn .head-btn ul li a:hover i {
   color: var(--primary-color) !important;
 }
 

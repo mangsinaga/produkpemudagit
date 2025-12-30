@@ -19,5 +19,12 @@
     "slug": "kecantikan",
     "description": "Produk perawatan dan kecantikan",
     "createdAt": "2024-01-01"
+  },
+  {
+    "id": 4,
+    "name": "Layanan",
+    "slug": "layanan",
+    "description": "",
+    "createdAt": "2025-12-30"
   }
 ]
