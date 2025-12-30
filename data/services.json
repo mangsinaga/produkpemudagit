@@ -30,11 +30,11 @@
   {
     "id": 2,
     "title": "Gula Jawa Premium",
-    "slug": "gula-jawa",
+    "slug": "gula-jawa-premium",
     "shortDescription": "Produk pemanis alami dengan kualitas tinggi, cocok untuk kebutuhan dapur dan berbagai olahan kuliner.",
     "content": "<p>Gula Jawa premium kami diproduksi dari nira kelapa pilihan dengan proses tradisional yang terjaga kualitasnya. Cocok untuk berbagai kebutuhan kuliner dan minuman.</p>",
     "featuredImage": "/img/all-images/project/project-img18.png",
-    "icon": "/img/icons/service17.svg",
+    "icon": "/img/icons/service16.svg",
     "categoryId": 1,
     "categoryTag": "#Pemanis Alami",
     "status": "available",
@@ -53,7 +53,7 @@
     "order": 2,
     "published": true,
     "createdAt": "2024-01-01",
-    "updatedAt": "2024-01-01"
+    "updatedAt": "2025-12-30"
   },
   {
     "id": 3,
@@ -62,7 +62,7 @@
     "shortDescription": "Produk camilan yang sedang dalam tahap pengembangan sebagai ekspansi lini makanan ringan dengan cita rasa khas.",
     "content": "<p>Keripik adalah produk camilan yang sedang dalam tahap pengembangan. Kami berkomitmen untuk menghadirkan camilan berkualitas tinggi dengan cita rasa khas Indonesia.</p>",
     "featuredImage": "/img/all-images/project/project-img19.png",
-    "icon": "/img/icons/service18.svg",
+    "icon": "/img/icons/service16.svg",
     "categoryId": 2,
     "categoryTag": "#Makanan Ringan",
     "status": "coming",
@@ -80,7 +80,7 @@
     "order": 3,
     "published": true,
     "createdAt": "2024-01-01",
-    "updatedAt": "2024-01-01"
+    "updatedAt": "2025-12-30"
   },
   {
     "id": 4,
@@ -89,7 +89,7 @@
     "shortDescription": "Mengembangkan produk perawatan kulit berbahan aman dan berkualitas untuk memenuhi permintaan pasar yang terus berkembang.",
     "content": "<p>Produk skincare kami akan hadir dengan formula yang aman dan berkualitas. Dikembangkan dengan bahan-bahan alami untuk memenuhi kebutuhan perawatan kulit Anda.</p>",
     "featuredImage": "/img/all-images/project/project-img13.png",
-    "icon": "/img/icons/service16.svg",
+    "icon": "/img/icons/service17.svg",
     "categoryId": 3,
     "categoryTag": "#Kecantikan",
     "status": "future",
@@ -116,7 +116,7 @@
     "shortDescription": "Masuk ke sektor digital melalui pengembangan aplikasi dan solusi teknologi sebagai bentuk diversifikasi usaha jangka panjang.",
     "content": "<p>Layanan pengembangan aplikasi dan solusi digital untuk membantu bisnis bertransformasi di era digital. Kami menyediakan jasa pembuatan aplikasi mobile dan web.</p>",
     "featuredImage": "/img/all-images/project/project-img16.png",
-    "icon": "/img/icons/service16.svg",
+    "icon": "/img/icons/service32.svg",
     "categoryId": 4,
     "categoryTag": "#Teknologi",
     "status": "future",
