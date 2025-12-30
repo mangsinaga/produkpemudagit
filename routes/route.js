@@ -152,7 +152,7 @@ route.get('/contact-us', (req, res, next) => {
 // CSR
 route.get('/csr', (req, res, next) => {
   const settings = readJSON('settings.json');
-  res.render('csr', { settings });
+  res.render('csr', { layout: 'partials/base', settings });
 })
 
 // Business Card Profile (tidak ada di menu, untuk kartu nama)

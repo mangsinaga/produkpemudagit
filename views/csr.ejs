@@ -1,27 +1,27 @@
-<%- include('partials/header/navbar') %>
+<%- contentFor('html_attribute') %>
 
-<!--===== HERO AREA STARTS =======-->
-<div class="vl-hero-page-area">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <div class="vl-hero-page-heading">
-          <h1>Corporate Social Responsibility</h1>
-          <div class="space16"></div>
-          <div class="vl-breadcrumb-area">
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">CSR</li>
-              </ol>
-            </nav>
+<%- contentFor('body_attribute') %>
+
+<%- contentFor('extra_css') %>
+
+<%- contentFor('content') %>
+  <%- include('partials/header/navbar5') %>
+
+  <!-- ===== HERO AREA STARTS ======= -->
+  <div class="inner-pages-section-area" style="background-image: url(/img/all-images/bg/hero-bg1.png); background-position: center; background-repeat: no-repeat; background-size: cover;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 m-auto">
+          <div class="inner-header text-center">
+            <h2>Corporate Social Responsibility</h2>
+            <div class="space24"></div>
+            <a href="/">Home <i class="fa-solid fa-angle-right"></i> <span>CSR</span></a>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!--===== HERO AREA ENDS =======-->
+  <!-- ===== HERO AREA ENDS ======= -->
 
 <!--===== CSR INTRO STARTS =======-->
 <div class="vl-about-section-area sp1">
@@ -194,5 +194,4 @@
 </div>
 <!--===== CSR VALUES ENDS =======-->
 
-<%- include('partials/cta') %>
-<%- include('partials/footer') %>
+<%- contentFor('extra_javascript') %>
