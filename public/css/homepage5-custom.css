@@ -7,7 +7,7 @@
 }
 
 .homepage5-body .vl-transparent-header .vl-logo img {
-  filter: brightness(0) invert(1) !important;
+  filter: none !important;
 }
 
 .homepage5-body .vl-main-menu ul > li > a {
