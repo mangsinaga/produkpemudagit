@@ -141,8 +141,7 @@
           <div class="inner-header text-center">
             <h2><%= article.category %></h2>
             <div class="space24"></div>
-            <a href="/">Home <i class="fa-solid fa-angle-right"></i> <a href="/news">News & Event</a> <i class="fa-solid fa-angle-right"></i> <span>Detail</span></a>
-          </div>
+            </div>
         </div>
       </div>
     </div>
@@ -191,9 +190,10 @@
               <div class="social">
                 <ul>
                   <li style="font-weight: 600;">Share:</li>
-                  <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-                  <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                  <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a></li>
+                  <li><a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(fullUrl) %>" target="_blank" title="Share ke Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+                  <li><a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(fullUrl) %>&text=<%= encodeURIComponent(article.title) %>" target="_blank" title="Share ke Twitter/X"><i class="fa-brands fa-x-twitter"></i></a></li>
+                  <li><a href="https://wa.me/?text=<%= encodeURIComponent(article.title + ' - ' + fullUrl) %>" target="_blank" title="Share ke WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
+                  <li><a href="#" onclick="copyToClipboard('<%= fullUrl %>'); return false;" title="Copy Link"><i class="fa-solid fa-link"></i></a></li>
                 </ul>
               </div>
             </div>
@@ -369,3 +369,19 @@
   <!-- ===== FOOTER AREA ENDS ======= -->
 
 <%- contentFor('extra_javascript') %>
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    alert('Link berhasil disalin!');
+  }, function(err) {
+    // Fallback for older browsers
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('Link berhasil disalin!');
+  });
+}
+</script>

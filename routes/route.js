@@ -135,7 +135,8 @@ route.get('/news/:slug', (req, res, next) => {
   }
   
   const relatedArticles = articles.filter(a => a.id !== article.id && a.category === article.category).slice(0, 3);
-  res.render('news-detail', { layout: 'partials/base', settings, article, relatedArticles });
+  const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+  res.render('news-detail', { layout: 'partials/base', settings, article, relatedArticles, fullUrl });
 })
 
 // Contact Us
