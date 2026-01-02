@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const QRCode = require('qrcode');
 
 const dataPath = path.join(__dirname, '../data');
 
@@ -444,6 +445,96 @@ router.get('/cards/delete/:id', isAuthenticated, (req, res) => {
     cards = cards.filter(c => c.id !== parseInt(req.params.id));
     writeJSON('cards.json', cards);
     res.redirect('/admin/cards');
+});
+
+// Generate QR Code for Business Card
+router.get('/cards/qrcode/:id', isAuthenticated, async (req, res) => {
+    const cards = readJSON('cards.json');
+    const card = cards.find(c => c.id === parseInt(req.params.id));
+    
+    if (!card) {
+        return res.status(404).send('Card not found');
+    }
+    
+    // Get base URL from settings or use default
+    const settings = readJSON('settings.json');
+    const baseUrl = 'https://produkpemuda.com';
+    const cardUrl = `${baseUrl}/card/${card.slug}`;
+    
+    res.render('admin/cards/qrcode', {
+        layout: 'admin/layout',
+        admin: req.session.admin,
+        card,
+        cardUrl
+    });
+});
+
+// API endpoint to generate QR Code image
+router.get('/cards/qrcode/:id/generate', isAuthenticated, async (req, res) => {
+    const cards = readJSON('cards.json');
+    const card = cards.find(c => c.id === parseInt(req.params.id));
+    
+    if (!card) {
+        return res.status(404).json({ error: 'Card not found' });
+    }
+    
+    const baseUrl = 'https://produkpemuda.com';
+    const cardUrl = `${baseUrl}/card/${card.slug}`;
+    const size = parseInt(req.query.size) || 1000; // Default 1000px for print quality
+    
+    try {
+        const qrCodeDataUrl = await QRCode.toDataURL(cardUrl, {
+            width: size,
+            margin: 2,
+            color: {
+                dark: '#4A0E19', // Primary color
+                light: '#FFFFFF'
+            },
+            errorCorrectionLevel: 'H' // High error correction for print
+        });
+        
+        res.json({ 
+            success: true, 
+            qrCode: qrCodeDataUrl,
+            cardUrl,
+            cardName: card.name,
+            size
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to generate QR code' });
+    }
+});
+
+// Download QR Code as PNG
+router.get('/cards/qrcode/:id/download', isAuthenticated, async (req, res) => {
+    const cards = readJSON('cards.json');
+    const card = cards.find(c => c.id === parseInt(req.params.id));
+    
+    if (!card) {
+        return res.status(404).send('Card not found');
+    }
+    
+    const baseUrl = 'https://produkpemuda.com';
+    const cardUrl = `${baseUrl}/card/${card.slug}`;
+    const size = parseInt(req.query.size) || 1000;
+    
+    try {
+        const qrCodeBuffer = await QRCode.toBuffer(cardUrl, {
+            width: size,
+            margin: 2,
+            color: {
+                dark: '#4A0E19',
+                light: '#FFFFFF'
+            },
+            errorCorrectionLevel: 'H'
+        });
+        
+        res.setHeader('Content-Type', 'image/png');
+        res.setHeader('Content-Disposition', `attachment; filename="qrcode-${card.slug}-${size}px.png"`);
+        res.send(qrCodeBuffer);
+    } catch (err) {
+        res.status(500).send('Failed to generate QR code');
+    }
 });
 
 // Services CRUD

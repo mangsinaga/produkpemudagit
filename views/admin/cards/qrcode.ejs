@@ -1,0 +1,146 @@
+<% locals.page = 'cards' %>
+
+<div class="top-bar">
+    <h1 class="page-title">Generate QR Code - <%= card.name %></h1>
+    <a href="/admin/cards" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Kembali
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-qr-code"></i> Preview QR Code
+            </div>
+            <div class="card-body text-center">
+                <div id="qrcode-preview" style="padding: 20px; background: #fff; display: inline-block; border-radius: 8px; border: 1px solid #eee;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <p class="text-muted mb-1">URL yang di-encode:</p>
+                    <code id="card-url"><%= cardUrl %></code>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-info-circle"></i> Informasi Kartu
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <td width="120"><strong>Nama</strong></td>
+                        <td><%= card.name %></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Posisi</strong></td>
+                        <td><%= card.position %></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Slug</strong></td>
+                        <td><code><%= card.slug %></code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>URL</strong></td>
+                        <td><a href="<%= cardUrl %>" target="_blank"><%= cardUrl %></a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <i class="bi bi-download"></i> Download QR Code
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">Pilih ukuran QR Code untuk didownload. Ukuran lebih besar cocok untuk cetak kualitas tinggi.</p>
+                
+                <div class="mb-3">
+                    <label class="form-label">Ukuran (pixel)</label>
+                    <select id="qr-size" class="form-select">
+                        <option value="300">300 x 300 px (Web/Screen)</option>
+                        <option value="500">500 x 500 px (Small Print)</option>
+                        <option value="1000" selected>1000 x 1000 px (Standard Print)</option>
+                        <option value="2000">2000 x 2000 px (High Quality Print)</option>
+                        <option value="3000">3000 x 3000 px (Professional Print)</option>
+                    </select>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="downloadQRCode()">
+                        <i class="bi bi-download"></i> Download PNG
+                    </button>
+                </div>
+                
+                <hr>
+                
+                <p class="text-muted small mb-2"><strong>Rekomendasi Ukuran:</strong></p>
+                <ul class="text-muted small">
+                    <li><strong>300px</strong> - Untuk tampilan web atau email</li>
+                    <li><strong>500px</strong> - Untuk cetak kecil (2-3 cm)</li>
+                    <li><strong>1000px</strong> - Untuk kartu nama standar (3-4 cm)</li>
+                    <li><strong>2000px</strong> - Untuk cetak besar (5-10 cm)</li>
+                    <li><strong>3000px</strong> - Untuk poster atau banner</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <i class="bi bi-lightbulb"></i> Tips Penggunaan
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h6><i class="bi bi-printer"></i> Untuk Kartu Nama Fisik</h6>
+                <p class="text-muted small">Gunakan ukuran minimal 1000px untuk hasil cetak yang tajam. Pastikan QR code memiliki kontras yang baik dengan background kartu nama.</p>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="bi bi-phone"></i> Untuk Digital</h6>
+                <p class="text-muted small">Ukuran 300-500px sudah cukup untuk penggunaan di website, email signature, atau media sosial.</p>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="bi bi-check-circle"></i> Best Practice</h6>
+                <p class="text-muted small">Selalu test scan QR code sebelum mencetak. Pastikan ada margin putih di sekitar QR code untuk kemudahan scanning.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Generate QR Code preview on page load
+document.addEventListener('DOMContentLoaded', function() {
+    generatePreview();
+});
+
+function generatePreview() {
+    fetch('/admin/cards/qrcode/<%= card.id %>/generate?size=400')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('qrcode-preview').innerHTML = 
+                    '<img src="' + data.qrCode + '" alt="QR Code" style="max-width: 100%; height: auto;">';
+            } else {
+                document.getElementById('qrcode-preview').innerHTML = 
+                    '<p class="text-danger">Gagal generate QR Code</p>';
+            }
+        })
+        .catch(err => {
+            document.getElementById('qrcode-preview').innerHTML = 
+                '<p class="text-danger">Error: ' + err.message + '</p>';
+        });
+}
+
+function downloadQRCode() {
+    const size = document.getElementById('qr-size').value;
+    window.location.href = '/admin/cards/qrcode/<%= card.id %>/download?size=' + size;
+}
+</script>
