@@ -9,10 +9,13 @@
           <p>PT Produk Pemuda Santara - Menghadirkan produk berkualitas yang mengangkat kekayaan rasa dan tradisi Nusantara dengan semangat pemberdayaan pemuda Indonesia.</p>
           <div class="space24"></div>
           <ul>
-            <li><a href="https://facebook.com/produkpemuda" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
-            <li><a href="https://linkedin.com/company/produkpemuda" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></li>
-            <li><a href="https://instagram.com/produkpemuda" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
-            <li><a href="https://twitter.com/produkpemuda" target="_blank" class="m-0"><i class="fa-brands fa-twitter"></i></a></li>
+            <% if (typeof settings !== 'undefined' && settings.site && settings.site.social) { %>
+              <% if (settings.site.social.instagram) { %><li><a href="<%= settings.site.social.instagram %>" target="_blank"><i class="fa-brands fa-instagram"></i></a></li><% } %>
+              <% if (settings.site.social.tiktok) { %><li><a href="<%= settings.site.social.tiktok %>" target="_blank"><i class="fa-brands fa-tiktok"></i></a></li><% } %>
+              <% if (settings.site.social.youtube) { %><li><a href="<%= settings.site.social.youtube %>" target="_blank"><i class="fa-brands fa-youtube"></i></a></li><% } %>
+              <% if (settings.site.social.tokopedia) { %><li><a href="<%= settings.site.social.tokopedia %>" target="_blank"><img src="/img/icons/tokopedia.svg" alt="Tokopedia" style="width: 16px; height: 16px;"></a></li><% } %>
+              <% if (settings.site.social.shopee) { %><li><a href="<%= settings.site.social.shopee %>" target="_blank" class="m-0"><img src="/img/icons/shopee.svg" alt="Shopee" style="width: 16px; height: 16px;"></a></li><% } %>
+            <% } %>
           </ul>
         </div>
       </div>

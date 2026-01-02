@@ -26,11 +26,13 @@
           <div class="vl-hero-btn d-none d-lg-block text-end">
             <div class="head-btn">
               <ul>
-                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                <li><a href="#"><i class="fa-brands fa-tiktok"></i></a></li>
-                <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
-                <li><a href="#"><img src="/img/icons/tokopedia.svg" alt="Tokopedia" style="width: 16px; height: 16px;"></a></li>
-                <li><a href="#"><img src="/img/icons/shopee.svg" alt="Shopee" style="width: 16px; height: 16px;"></a></li>
+                <% if (typeof settings !== 'undefined' && settings.site && settings.site.social) { %>
+                  <% if (settings.site.social.instagram) { %><li><a href="<%= settings.site.social.instagram %>" target="_blank"><i class="fa-brands fa-instagram"></i></a></li><% } %>
+                  <% if (settings.site.social.tiktok) { %><li><a href="<%= settings.site.social.tiktok %>" target="_blank"><i class="fa-brands fa-tiktok"></i></a></li><% } %>
+                  <% if (settings.site.social.youtube) { %><li><a href="<%= settings.site.social.youtube %>" target="_blank"><i class="fa-brands fa-youtube"></i></a></li><% } %>
+                  <% if (settings.site.social.tokopedia) { %><li><a href="<%= settings.site.social.tokopedia %>" target="_blank"><img src="/img/icons/tokopedia.svg" alt="Tokopedia" style="width: 16px; height: 16px;"></a></li><% } %>
+                  <% if (settings.site.social.shopee) { %><li><a href="<%= settings.site.social.shopee %>" target="_blank"><img src="/img/icons/shopee.svg" alt="Shopee" style="width: 16px; height: 16px;"></a></li><% } %>
+                <% } %>
               </ul>
             </div>
           </div>
@@ -75,10 +77,13 @@
       <div class="vl-offcanvas-social">
         <h3 class="vl-offcanvas-sm-title">Follow Us</h3>
         <div class="space20"></div>
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
+        <% if (typeof settings !== 'undefined' && settings.site && settings.site.social) { %>
+          <% if (settings.site.social.instagram) { %><a href="<%= settings.site.social.instagram %>" target="_blank"><i class="fab fa-instagram"></i></a><% } %>
+          <% if (settings.site.social.tiktok) { %><a href="<%= settings.site.social.tiktok %>" target="_blank"><i class="fab fa-tiktok"></i></a><% } %>
+          <% if (settings.site.social.youtube) { %><a href="<%= settings.site.social.youtube %>" target="_blank"><i class="fab fa-youtube"></i></a><% } %>
+          <% if (settings.site.social.tokopedia) { %><a href="<%= settings.site.social.tokopedia %>" target="_blank"><img src="/img/icons/tokopedia.svg" alt="Tokopedia" style="width: 18px; height: 18px;"></a><% } %>
+          <% if (settings.site.social.shopee) { %><a href="<%= settings.site.social.shopee %>" target="_blank"><img src="/img/icons/shopee.svg" alt="Shopee" style="width: 18px; height: 18px;"></a><% } %>
+        <% } %>
       </div>
 
     </div>

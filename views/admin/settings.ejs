@@ -51,30 +51,36 @@
                 </div>
             </div>
 
-            <h5 class="mb-3">Media Sosial</h5>
+            <h5 class="mb-3">Media Sosial & Marketplace</h5>
             <div class="row mb-4">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">Facebook</label>
-                        <input type="url" name="social_facebook" class="form-control" value="<%= settings.site.social.facebook %>">
+                        <label class="form-label"><i class="bi bi-instagram"></i> Instagram</label>
+                        <input type="url" name="social_instagram" class="form-control" value="<%= settings.site.social.instagram || '' %>" placeholder="https://instagram.com/username">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">Instagram</label>
-                        <input type="url" name="social_instagram" class="form-control" value="<%= settings.site.social.instagram %>">
+                        <label class="form-label"><i class="bi bi-tiktok"></i> TikTok</label>
+                        <input type="url" name="social_tiktok" class="form-control" value="<%= settings.site.social.tiktok || '' %>" placeholder="https://tiktok.com/@username">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">Twitter</label>
-                        <input type="url" name="social_twitter" class="form-control" value="<%= settings.site.social.twitter %>">
+                        <label class="form-label"><i class="bi bi-youtube"></i> YouTube</label>
+                        <input type="url" name="social_youtube" class="form-control" value="<%= settings.site.social.youtube || '' %>" placeholder="https://youtube.com/@channel">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">LinkedIn</label>
-                        <input type="url" name="social_linkedin" class="form-control" value="<%= settings.site.social.linkedin %>">
+                        <label class="form-label"><i class="bi bi-shop"></i> Shopee</label>
+                        <input type="url" name="social_shopee" class="form-control" value="<%= settings.site.social.shopee || '' %>" placeholder="https://shopee.co.id/shop">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="bi bi-bag"></i> Tokopedia</label>
+                        <input type="url" name="social_tokopedia" class="form-control" value="<%= settings.site.social.tokopedia || '' %>" placeholder="https://tokopedia.com/shop">
                     </div>
                 </div>
             </div>

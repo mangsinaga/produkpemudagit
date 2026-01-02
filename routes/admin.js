@@ -1119,10 +1119,11 @@ router.post('/settings', isAuthenticated, (req, res) => {
         phone: req.body.site_phone,
         address: req.body.site_address,
         social: {
-            facebook: req.body.social_facebook,
             instagram: req.body.social_instagram,
-            twitter: req.body.social_twitter,
-            linkedin: req.body.social_linkedin
+            tiktok: req.body.social_tiktok,
+            youtube: req.body.social_youtube,
+            shopee: req.body.social_shopee,
+            tokopedia: req.body.social_tokopedia
         }
     };
     
