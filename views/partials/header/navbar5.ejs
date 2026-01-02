@@ -12,12 +12,12 @@
           <div class="vl-main-menu text-center">
             <nav class="vl-mobile-menu-active">
               <ul>
-                <li><a href="/" class="<%= req.path === '/' ? 'active' : '' %>">Home</a></li>
-                <li><a href="/profile" class="<%= req.path === '/profile' ? 'active' : '' %>">Profile</a></li>
-                <li><a href="/produk" class="<%= req.path === '/produk' ? 'active' : '' %>">Produk</a></li>
-                <li><a href="/news" class="<%= req.path === '/news' ? 'active' : '' %>">News & Event</a></li>
-                <li><a href="/contact-us" class="<%= req.path === '/contact-us' ? 'active' : '' %>">Contact Us</a></li>
-                <li><a href="/csr" class="<%= req.path === '/csr' ? 'active' : '' %>">CSR</a></li>
+                <li><a href="/" class="<%= typeof currentPath !== 'undefined' && currentPath === '/' ? 'active' : '' %>">Home</a></li>
+                <li><a href="/profile" class="<%= typeof currentPath !== 'undefined' && currentPath === '/profile' ? 'active' : '' %>">Profile</a></li>
+                <li><a href="/produk" class="<%= typeof currentPath !== 'undefined' && currentPath === '/produk' ? 'active' : '' %>">Produk</a></li>
+                <li><a href="/news" class="<%= typeof currentPath !== 'undefined' && currentPath === '/news' ? 'active' : '' %>">News & Event</a></li>
+                <li><a href="/contact-us" class="<%= typeof currentPath !== 'undefined' && currentPath === '/contact-us' ? 'active' : '' %>">Contact Us</a></li>
+                <li><a href="/csr" class="<%= typeof currentPath !== 'undefined' && currentPath === '/csr' ? 'active' : '' %>">CSR</a></li>
               </ul>
             </nav>
           </div>

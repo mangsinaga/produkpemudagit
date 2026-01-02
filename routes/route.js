@@ -23,13 +23,13 @@ route.get('/', (req, res, next) => {
   const projects = readJSON('projects.json').filter(p => p.published).sort((a, b) => a.order - b.order);
   const projectCategories = readJSON('project-categories.json');
   const articles = readJSON('articles.json').filter(a => a.published).slice(0, 4);
-  res.render('index5', { layout: 'partials/base', settings, testimonials, services, projects, projectCategories, articles });
+  res.render('index5', { layout: 'partials/base', settings, testimonials, services, projects, projectCategories, articles, currentPath: req.path });
 })
 
 // Profile
 route.get('/profile', (req, res, next) => {
   const settings = readJSON('settings.json');
-  res.render('profile', { layout: 'partials/base', settings });
+  res.render('profile', { layout: 'partials/base', settings, currentPath: req.path });
 })
 
 // History
@@ -44,7 +44,7 @@ route.get('/produk', (req, res, next) => {
   const settings = readJSON('settings.json');
   const services = readJSON('services.json').filter(s => s.published).sort((a, b) => a.order - b.order);
   const categories = readJSON('service-categories.json');
-  res.render('produk', { layout: 'partials/base', settings, services, categories });
+  res.render('produk', { layout: 'partials/base', settings, services, categories, currentPath: req.path });
 })
 
 // Project List
@@ -121,7 +121,7 @@ route.get('/produk/:slug', (req, res, next) => {
 route.get('/news', (req, res, next) => {
   const settings = readJSON('settings.json');
   const articles = readJSON('articles.json').filter(a => a.published);
-  res.render('news', { layout: 'partials/base', settings, articles });
+  res.render('news', { layout: 'partials/base', settings, articles, currentPath: req.path });
 })
 
 // News Detail
@@ -148,7 +148,7 @@ route.get('/contact', (req, res, next) => {
 // Contact Us (New Page with proper header)
 route.get('/contact-us', (req, res, next) => {
   const settings = readJSON('settings.json');
-  res.render('contact-us', { layout: 'partials/base', settings, hideCta: true });
+  res.render('contact-us', { layout: 'partials/base', settings, hideCta: true, currentPath: req.path });
 })
 
 // Contact Form Submit - Send Email
@@ -214,7 +214,7 @@ route.post('/contact/send', async (req, res) => {
 route.get('/csr', (req, res, next) => {
   const settings = readJSON('settings.json');
   const csrFocus = readJSON('csr-focus.json').filter(c => c.published).sort((a, b) => a.order - b.order);
-  res.render('csr', { layout: 'partials/base', settings, csrFocus });
+  res.render('csr', { layout: 'partials/base', settings, csrFocus, currentPath: req.path });
 })
 
 // Business Card Profile (tidak ada di menu, untuk kartu nama)
