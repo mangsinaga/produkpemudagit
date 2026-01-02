@@ -154,6 +154,8 @@ route.get('/contact-us', (req, res, next) => {
 // Contact Form Submit - Send Email
 route.post('/contact/send', async (req, res) => {
   const { firstName, lastName, email, phone, subject, message } = req.body;
+  const settings = readJSON('settings.json');
+  const siteName = settings.site?.name || 'Website';
   
   // Create transporter using cPanel email settings
   const transporter = nodemailer.createTransport({
@@ -167,10 +169,10 @@ route.post('/contact/send', async (req, res) => {
   });
 
   const mailOptions = {
-    from: `"Website Contact Form" <${process.env.SMTP_USER || 'info@produkpemuda.com'}>`,
+    from: `"${siteName} Contact Form" <${process.env.SMTP_USER || 'info@produkpemuda.com'}>`,
     to: 'info@produkpemuda.com',
     replyTo: email,
-    subject: `[Website] ${subject}`,
+    subject: `[${siteName}] ${subject}`,
     html: `
       <h2>Pesan Baru dari Website</h2>
       <table style="border-collapse: collapse; width: 100%;">
