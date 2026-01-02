@@ -6849,7 +6849,8 @@ Location:
 .vl-footer1-section-area .vl-footer-widget ul li a img {
   margin: 0 8px 0 0;
 }
-.vl-footer1-section-area .vl-footer-widget ul li a:hover {
+.vl-footer1-section-area .vl-footer-widget ul li a:hover,
+.vl-footer1-section-area .vl-footer-widget ul li a.active {
   color: var(--ztc-text-text-4);
   transition: all 0.4s;
 }
@@ -9347,7 +9348,8 @@ Location:
   align-items: center;
   justify-content: space-between;
 }
-.homepage5-body .vl-main-menu ul > li a.nav-link.active {
+.homepage5-body .vl-main-menu ul > li a.nav-link.active,
+.homepage5-body .vl-main-menu ul > li > a.active {
   color: var(--ztc-text-text-16);
   background: none;
   opacity: 70%;
