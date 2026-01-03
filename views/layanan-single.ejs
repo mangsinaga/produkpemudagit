@@ -12,6 +12,19 @@
 <%- contentFor('body_attribute') %>
 
 <%- contentFor('extra_css') %>
+<style>
+/* Mobile adjustments for inner pages */
+@media (max-width: 768px) {
+  .inner-pages-section-area {
+    padding: 120px 0 30px!important;
+    min-height: 200px !important;
+  }
+  
+  .inner-header h2 {
+    font-size: 28px !important;
+  }
+}
+</style>
 
 <%- contentFor('head') %>
 <title><%= metaTitle %></title>

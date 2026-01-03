@@ -315,5 +315,14 @@
   </div>
   <!-- ===== FAQ AREA ENDS ======= -->
 
+<%- contentFor('extra_css') %>
+<style>
+/* Hide slider arrows on mobile */
+@media (max-width: 768px) {
+  .testimonial-arrows {
+    display: none !important;
+  }
+}
+</style>
 
 <%- contentFor('extra_javascript') %>

@@ -21,6 +21,18 @@
   .vl-blog-1-item {
     margin-bottom: 30px;
   }
+  
+  /* Mobile adjustments for inner pages */
+  @media (max-width: 768px) {
+    .inner-pages-section-area {
+      padding: 120px 0 30px!important;
+      min-height: 200px !important;
+    }
+    
+    .inner-header h2 {
+      font-size: 28px !important;
+    }
+  }
 </style>
 
 <%- contentFor('content') %>

@@ -3,6 +3,19 @@
 <%- contentFor('body_attribute') %>
 
 <%- contentFor('extra_css') %>
+<style>
+/* Contact page mobile adjustments */
+@media (max-width: 768px) {
+  .inner-pages-section-area {
+    padding: 120px 0 30px!important;
+    min-height: 200px !important;
+  }
+  
+  .inner-header h2 {
+    font-size: 28px !important;
+  }
+}
+</style>
 
 <%- contentFor('content') %>
   <%- include('partials/header/navbar5') %>
@@ -14,8 +27,6 @@
         <div class="col-lg-12 m-auto">
           <div class="inner-header text-center">
             <h2>Contact Us</h2>
-            <div class="space24"></div>
-            <a href="/">Home <i class="fa-solid fa-angle-right"></i> <span>Contact Us</span></a>
           </div>
         </div>
       </div>
