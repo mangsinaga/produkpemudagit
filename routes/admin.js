@@ -639,6 +639,16 @@ router.get('/gallery/delete/:id', isAuthenticated, (req, res) => {
     res.redirect('/admin/gallery');
 });
 
+// Helper function to get file stats with cache-busting
+const getFileWithCacheBust = (filePath) => {
+    try {
+        const stats = fs.statSync(path.join(__dirname, '../public', filePath));
+        return filePath + '?v=' + stats.mtime.getTime();
+    } catch (error) {
+        return filePath;
+    }
+};
+
 // Helper function to scan directory recursively
 const scanDirectory = (dirPath, arrayOfFiles = []) => {
     const files = fs.readdirSync(dirPath);
@@ -801,10 +811,14 @@ router.post('/media/replace', isAuthenticated, (req, res) => {
             // Remove backup after successful replacement
             fs.unlinkSync(backupPath);
             
+            // Update file modification time to bust browser cache
+            const now = new Date();
+            fs.utimesSync(fullPath, now, now);
+            
             res.json({ 
                 success: true, 
                 message: 'File replaced successfully',
-                path: targetPath
+                path: targetPath + '?v=' + now.getTime()
             });
         });
     } catch (error) {

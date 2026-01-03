@@ -138,6 +138,10 @@
                         <i class="bi bi-exclamation-triangle"></i>
                         <strong>Perhatian:</strong> File lama akan ditimpa dengan file baru. Pastikan Anda memiliki backup jika diperlukan.
                     </div>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Catatan:</strong> Setelah mereplace gambar, Anda mungkin perlu melakukan refresh halaman website (Ctrl+F5) untuk melihat perubahan karena browser cache.
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">File yang akan direplace:</label>
                         <div class="border rounded p-2 bg-light">
@@ -347,7 +351,7 @@ document.getElementById('replaceForm').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showToast('File berhasil direplace!', 'success');
+            showToast('File berhasil direplace! Refresh halaman website (Ctrl+F5) untuk melihat perubahan.', 'success');
             bootstrap.Modal.getInstance(document.getElementById('replaceModal')).hide();
             refreshMedia();
         } else {
