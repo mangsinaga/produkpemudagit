@@ -1,0 +1,203 @@
+<% locals.page = 'gallery' %>
+
+<div class="top-bar">
+    <h1 class="page-title">Upload Foto Galeri</h1>
+    <a href="/admin/gallery" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Kembali
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="/admin/gallery/upload" enctype="multipart/form-data" id="uploadForm">
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-images"></i> Pilih Foto Produk
+                </label>
+                <input type="file" 
+                       name="images" 
+                       class="form-control" 
+                       id="imageInput" 
+                       multiple 
+                       accept="image/*"
+                       onchange="previewImages()">
+                <small class="text-muted">
+                    Anda dapat memilih beberapa foto sekaligus (bulk upload). 
+                    Format: JPG, PNG, GIF, WebP. Maksimal 2MB per foto.
+                </small>
+            </div>
+
+            <div id="previewContainer" class="row g-3 mb-4" style="display: none;">
+                <div class="col-12">
+                    <h6>Preview Foto:</h6>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <i class="bi bi-cloud-upload"></i> Upload Semua Foto
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="clearSelection()">
+                    <i class="bi bi-x-circle"></i> Hapus Pilihan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Progress Modal -->
+<div class="modal fade" id="progressModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5>Mengupload Foto...</h5>
+                <p class="text-muted mb-0">Mohon tunggu, jangan tutup halaman ini.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.preview-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+}
+.preview-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    transition: transform 0.2s;
+}
+.preview-item:hover img {
+    transform: scale(1.05);
+}
+.preview-item .remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.preview-item:hover .remove-btn {
+    opacity: 1;
+}
+.preview-item .file-info {
+    padding: 8px;
+    background: #f8fafc;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+</style>
+
+<script>
+let selectedFiles = [];
+
+function previewImages() {
+    const input = document.getElementById('imageInput');
+    const previewContainer = document.getElementById('previewContainer');
+    
+    selectedFiles = Array.from(input.files);
+    
+    if (selectedFiles.length === 0) {
+        previewContainer.style.display = 'none';
+        return;
+    }
+    
+    previewContainer.style.display = 'flex';
+    previewContainer.innerHTML = '<div class="col-12"><h6>Preview Foto:</h6></div>';
+    
+    selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const col = document.createElement('div');
+            col.className = 'col-lg-3 col-md-4 col-sm-6';
+            
+            const fileSize = (file.size / 1024 / 1024).toFixed(2);
+            const isOversized = fileSize > 2;
+            
+            col.innerHTML = `
+                <div class="preview-item">
+                    <img src="${e.target.result}" alt="Preview ${index + 1}">
+                    <button type="button" class="remove-btn" onclick="removeFile(${index})">
+                        <i class="bi bi-x"></i>
+                    </button>
+                    <div class="file-info">
+                        <div class="text-truncate">${file.name}</div>
+                        <small class="${isOversized ? 'text-danger' : ''}">${fileSize} MB</small>
+                    </div>
+                </div>
+            `;
+            
+            previewContainer.appendChild(col);
+        };
+        
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeFile(index) {
+    const input = document.getElementById('imageInput');
+    const dt = new DataTransfer();
+    
+    selectedFiles.forEach((file, i) => {
+        if (i !== index) {
+            dt.items.add(file);
+        }
+    });
+    
+    input.files = dt.files;
+    previewImages();
+}
+
+function clearSelection() {
+    document.getElementById('imageInput').value = '';
+    document.getElementById('previewContainer').style.display = 'none';
+    selectedFiles = [];
+}
+
+// Form submission with progress modal
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    const input = document.getElementById('imageInput');
+    
+    if (input.files.length === 0) {
+        e.preventDefault();
+        alert('Silakan pilih foto terlebih dahulu!');
+        return;
+    }
+    
+    // Check file sizes
+    let hasOversizedFile = false;
+    Array.from(input.files).forEach(file => {
+        const fileSize = file.size / 1024 / 1024;
+        if (fileSize > 2) {
+            hasOversizedFile = true;
+        }
+    });
+    
+    if (hasOversizedFile) {
+        e.preventDefault();
+        alert('Beberapa foto melebihi ukuran maksimal 2MB. Silakan pilih foto yang lebih kecil.');
+        return;
+    }
+    
+    // Show progress modal
+    const modal = new bootstrap.Modal(document.getElementById('progressModal'));
+    modal.show();
+});
+</script>

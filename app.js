@@ -25,6 +25,26 @@ app.use(expressLayouts);
 app.use(express.static(__dirname + '/public'));
 
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware to provide gallery data to all routes
+app.use((req, res, next) => {
+    const fs = require('fs');
+    const path = require('path');
+    const dataPath = path.join(__dirname, 'data');
+    
+    const readJSON = (filename) => {
+        const filePath = path.join(dataPath, filename);
+        if (fs.existsSync(filePath)) {
+            return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        }
+        return [];
+    };
+    
+    // Get last 6 gallery images for footer
+    res.locals.gallery = readJSON('gallery.json').slice(-6);
+    next();
+});
+
 app.use('/', route);
 app.use('/admin', adminRoute);
 

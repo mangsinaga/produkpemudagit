@@ -565,6 +565,80 @@ router.get('/cards/qrcode/:id/download', isAuthenticated, async (req, res) => {
     }
 });
 
+// Gallery CRUD
+router.get('/gallery', isAuthenticated, (req, res) => {
+    const gallery = readJSON('gallery.json');
+    res.render('admin/gallery/index', {
+        layout: 'admin/layout',
+        admin: req.session.admin,
+        gallery
+    });
+});
+
+router.get('/gallery/upload', isAuthenticated, (req, res) => {
+    res.render('admin/gallery/upload', {
+        layout: 'admin/layout',
+        admin: req.session.admin
+    });
+});
+
+router.post('/gallery/upload', isAuthenticated, (req, res) => {
+    const gallery = readJSON('gallery.json');
+    const uploadedImages = [];
+    
+    if (req.files && req.files.images) {
+        const images = req.files.images;
+        // Handle multiple files
+        if (Array.isArray(images)) {
+            images.forEach((img, index) => {
+                const uploadedImage = handleImageUpload(img, '/uploads/gallery', `gallery-${Date.now()}-${index}`);
+                if (uploadedImage) {
+                    uploadedImages.push({
+                        id: gallery.length > 0 ? Math.max(...gallery.map(g => g.id)) + 1 + index : 1 + index,
+                        filename: uploadedImage,
+                        uploaded_at: new Date().toISOString()
+                    });
+                }
+            });
+        } else {
+            // Single file
+            const uploadedImage = handleImageUpload(images, '/uploads/gallery', `gallery-${Date.now()}`);
+            if (uploadedImage) {
+                uploadedImages.push({
+                    id: gallery.length > 0 ? Math.max(...gallery.map(g => g.id)) + 1 : 1,
+                    filename: uploadedImage,
+                    uploaded_at: new Date().toISOString()
+                });
+            }
+        }
+    }
+    
+    // Save to gallery.json
+    const updatedGallery = [...gallery, ...uploadedImages];
+    writeJSON('gallery.json', updatedGallery);
+    
+    res.redirect('/admin/gallery');
+});
+
+router.get('/gallery/delete/:id', isAuthenticated, (req, res) => {
+    let gallery = readJSON('gallery.json');
+    const imageToDelete = gallery.find(g => g.id === parseInt(req.params.id));
+    
+    // Delete file from filesystem
+    if (imageToDelete) {
+        const filePath = path.join(__dirname, '../public', imageToDelete.filename);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+    }
+    
+    // Remove from JSON
+    gallery = gallery.filter(g => g.id !== parseInt(req.params.id));
+    writeJSON('gallery.json', gallery);
+    
+    res.redirect('/admin/gallery');
+});
+
 // Services CRUD
 router.get('/services', isAuthenticated, (req, res) => {
     const services = readJSON('services.json');

@@ -23,7 +23,8 @@ route.get('/', (req, res, next) => {
   const projects = readJSON('projects.json').filter(p => p.published).sort((a, b) => a.order - b.order);
   const projectCategories = readJSON('project-categories.json');
   const articles = readJSON('articles.json').filter(a => a.published).slice(0, 4);
-  res.render('index5', { layout: 'partials/base', settings, testimonials, services, projects, projectCategories, articles, currentPath: req.path });
+  const gallery = readJSON('gallery.json').slice(-6); // Get last 6 images for footer
+  res.render('index5', { layout: 'partials/base', settings, testimonials, services, projects, projectCategories, articles, gallery, currentPath: req.path });
 })
 
 // Profile
