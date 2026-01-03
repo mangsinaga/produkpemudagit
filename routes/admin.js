@@ -374,6 +374,20 @@ router.post('/cards/create', isAuthenticated, (req, res) => {
     const cards = readJSON('cards.json');
     const newId = cards.length > 0 ? Math.max(...cards.map(c => c.id)) + 1 : 1;
     
+    // Handle photo upload
+    let photoPath = '/img/team/team-1.jpg'; // Default photo
+    
+    if (req.files && req.files.photo) {
+        // Upload new photo
+        const uploadedPhoto = handleImageUpload(req.files.photo, '/uploads/cards', 'card');
+        if (uploadedPhoto) {
+            photoPath = uploadedPhoto;
+        }
+    } else if (req.body.photo_url) {
+        // Use photo URL if provided
+        photoPath = req.body.photo_url;
+    }
+    
     const newCard = {
         id: newId,
         name: req.body.name,
@@ -382,7 +396,7 @@ router.post('/cards/create', isAuthenticated, (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         summary: req.body.summary,
-        photo: req.body.photo || '/img/team/team-1.jpg',
+        photo: photoPath,
         social: {
             linkedin: req.body.social_linkedin || '',
             instagram: req.body.social_instagram || '',
@@ -418,6 +432,20 @@ router.post('/cards/edit/:id', isAuthenticated, (req, res) => {
     const index = cards.findIndex(c => c.id === parseInt(req.params.id));
     
     if (index !== -1) {
+        // Handle photo upload
+        let photoPath = cards[index].photo; // Keep existing photo by default
+        
+        if (req.files && req.files.photo) {
+            // Upload new photo
+            const uploadedPhoto = handleImageUpload(req.files.photo, '/uploads/cards', 'card');
+            if (uploadedPhoto) {
+                photoPath = uploadedPhoto;
+            }
+        } else if (req.body.photo_url) {
+            // Use photo URL if provided
+            photoPath = req.body.photo_url;
+        }
+        
         cards[index] = {
             ...cards[index],
             name: req.body.name,
@@ -426,7 +454,7 @@ router.post('/cards/edit/:id', isAuthenticated, (req, res) => {
             email: req.body.email,
             phone: req.body.phone,
             summary: req.body.summary,
-            photo: req.body.photo || cards[index].photo,
+            photo: photoPath,
             social: {
                 linkedin: req.body.social_linkedin || '',
                 instagram: req.body.social_instagram || '',

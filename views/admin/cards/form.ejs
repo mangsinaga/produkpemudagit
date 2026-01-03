@@ -9,7 +9,7 @@
 
 <div class="card">
     <div class="card-body">
-        <form method="POST" action="/admin/cards/<%= action === 'create' ? 'create' : 'edit/' + card.id %>">
+        <form method="POST" action="/admin/cards/<%= action === 'create' ? 'create' : 'edit/' + card.id %>" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-8">
                     <h5 class="mb-3">Informasi Dasar</h5>
@@ -75,14 +75,21 @@
                 <div class="col-md-4">
                     <h5 class="mb-3">Foto & Status</h5>
                     <div class="mb-3">
-                        <label class="form-label">URL Foto</label>
-                        <input type="text" name="photo" class="form-control" value="<%= card ? card.photo : '/img/team/team-1.jpg' %>" placeholder="/img/team/team-1.jpg">
-                        <small class="text-muted">Gunakan foto persegi (1:1) untuk hasil terbaik</small>
+                        <label class="form-label">Upload Foto</label>
+                        <input type="file" name="photo" class="form-control" accept="image/*" onchange="previewImage(event)">
+                        <small class="text-muted">Format: JPG, PNG, GIF. Maksimal 2MB. Gunakan foto persegi (1:1) untuk hasil terbaik</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Atau URL Foto (jika tidak upload)</label>
+                        <input type="text" name="photo_url" class="form-control" value="<%= card && !card.photo.includes('/uploads/') ? card.photo : '' %>" placeholder="/img/team/team-1.jpg">
+                        <small class="text-muted">Opsional, isi jika tidak upload gambar</small>
                     </div>
                     
                     <% if (card && card.photo) { %>
                     <div class="mb-3 text-center">
-                        <img src="<%= card.photo %>" alt="Preview" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #4A0E19;">
+                        <label class="form-label d-block">Foto Saat Ini:</label>
+                        <img id="currentPhoto" src="<%= card.photo %>" alt="Preview" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #4A0E19;">
                     </div>
                     <% } %>
                     
@@ -115,3 +122,28 @@
         </form>
     </div>
 </div>
+
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const currentPhoto = document.getElementById('currentPhoto');
+            if (currentPhoto) {
+                currentPhoto.src = e.target.result;
+            } else {
+                // Create preview if not exists
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'mb-3 text-center';
+                previewDiv.innerHTML = `
+                    <label class="form-label d-block">Preview Foto:</label>
+                    <img src="${e.target.result}" alt="Preview" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #4A0E19;">
+                `;
+                event.target.parentNode.insertBefore(previewDiv, event.target.nextSibling);
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+}
+</script>

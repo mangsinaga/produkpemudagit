@@ -45,6 +45,19 @@
             background: var(--primary-color);
             height: 120px;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .card-header-bg .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            height: 60px;
+            filter: brightness(0) invert(1);
+            z-index: 5;
         }
         
         .card-header-bg::after {
@@ -241,7 +254,9 @@
 </head>
 <body>
     <div class="card-container">
-        <div class="card-header-bg"></div>
+        <div class="card-header-bg">
+            <img src="/img/logo/fav-logo2.png" alt="Logo" class="logo">
+        </div>
         
         <div class="photo-wrapper">
             <img src="<%= card.photo || '/img/team/team-1.jpg' %>" alt="<%= card.name %>" class="photo">
