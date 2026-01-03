@@ -44,7 +44,7 @@
       <div class="row">
         <div class="col-lg-12 m-auto">
           <div class="inner-header text-center">
-            <h2>News & Event</h2>
+            <h2>Blog</h2>
             <div class="space24"></div>            
           </div>
         </div>
@@ -70,7 +70,7 @@
                 <ul>
                   <li>
                     <a href="#">
-                      <i class="fa-regular fa-calendar"></i> <%= article.date %> <span>|</span>
+                      <i class="fa-regular fa-calendar"></i> <%= new Date(article.date).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) %> <span>|</span>
                     </a>
                   </li>
                   <li>

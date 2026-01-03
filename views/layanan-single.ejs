@@ -121,7 +121,7 @@
               </li>
               <% } %>
               <li style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
-                <strong>Terakhir Update:</strong> <%= service.updatedAt %>
+                <strong>Terakhir Update:</strong> <%= new Date(service.updatedAt).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) %>
               </li>
             </ul>
           </div>

@@ -178,7 +178,7 @@
             <ul class="list-author" style="display: flex; gap: 20px; list-style: none; padding: 0; flex-wrap: wrap;">
               <li>
                 <a href="#" style="display: flex; align-items: center; gap: 8px; color: var(--text-color);">
-                  <i class="fa-regular fa-calendar"></i> <%= article.date %>
+                  <i class="fa-regular fa-calendar"></i> <%= new Date(article.date).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) %>
                 </a>
               </li>
               <li>
@@ -238,7 +238,7 @@
                   <ul style="list-style: none; padding: 0; margin: 0;">
                     <li>
                       <a href="#" style="font-size: 12px; color: var(--text-light);">
-                        <i class="fa-regular fa-calendar"></i> <%= related.date %>
+                        <i class="fa-regular fa-calendar"></i> <%= new Date(related.date).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) %>
                       </a>
                     </li>
                   </ul>
@@ -289,7 +289,7 @@
                 <ul style="list-style: none; padding: 0; display: flex; gap: 16px;">
                   <li>
                     <a href="#" style="color: var(--text-light); font-size: 14px;">
-                      <i class="fa-regular fa-calendar"></i> <%= related.date %>
+                      <i class="fa-regular fa-calendar"></i> <%= new Date(related.date).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }) %>
                     </a>
                   </li>
                 </ul>
