@@ -1,0 +1,394 @@
+<% locals.page = 'media' %>
+
+<div class="top-bar">
+    <h1 class="page-title">Media Manager</h1>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+            <i class="bi bi-cloud-upload"></i> Upload File
+        </button>
+        <button class="btn btn-outline-info" onclick="refreshMedia()">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+        </button>
+    </div>
+</div>
+
+<% if (typeof error !== 'undefined') { %>
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle"></i> <%= error %>
+    </div>
+<% } %>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-images"></i> Daftar Media 
+            <span class="badge bg-primary ms-2"><%= totalFiles %> files</span>
+        </h5>
+    </div>
+    <div class="card-body">
+        <% if (Object.keys(mediaFiles).length > 0) { %>
+            <% Object.keys(mediaFiles).sort().forEach(directory => { %>
+                <div class="mb-4">
+                    <h6 class="text-muted mb-3">
+                        <i class="bi bi-folder-fill"></i> 
+                        <%= directory === '/img' ? 'Root Images' : directory %>
+                        <span class="badge bg-secondary ms-2"><%= mediaFiles[directory].length %></span>
+                    </h6>
+                    <div class="row g-3">
+                        <% mediaFiles[directory].forEach(file => { %>
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                                <div class="media-item card" data-path="<%= file.path %>">
+                                    <div class="media-preview position-relative">
+                                        <% if (file.ext === '.svg') { %>
+                                            <img src="<%= file.path %>" class="img-fluid" alt="<%= file.name %>" style="max-height: 150px;">
+                                        <% } else { %>
+                                            <img src="<%= file.path %>" class="img-fluid" alt="<%= file.name %>" style="max-height: 150px; object-fit: cover;">
+                                        <% } %>
+                                        <div class="media-overlay">
+                                            <button class="btn btn-sm btn-light" onclick="previewImage('<%= file.path %>', '<%= file.name %>')">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="media-info p-2">
+                                        <small class="d-block text-truncate" title="<%= file.name %>">
+                                            <%= file.name %>
+                                        </small>
+                                        <small class="text-muted">
+                                            <%= (file.size / 1024).toFixed(1) %> KB
+                                        </small>
+                                        <div class="btn-group btn-group-sm w-100 mt-1" role="group">
+                                            <button class="btn btn-outline-primary" onclick="copyPath('<%= file.path %>')" title="Copy Path">
+                                                <i class="bi bi-clipboard"></i>
+                                            </button>
+                                            <button class="btn btn-outline-warning" onclick="replaceImage('<%= file.path %>', '<%= file.name %>')" title="Replace">
+                                                <i class="bi bi-arrow-repeat"></i>
+                                            </button>
+                                            <button class="btn btn-outline-danger" onclick="deleteImage('<%= file.path %>')" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="text-center py-5">
+                <i class="bi bi-images display-1 text-muted"></i>
+                <h5 class="mt-3 text-muted">Tidak ada media ditemukan</h5>
+                <p class="text-muted">Folder public/img kosong atau tidak dapat diakses</p>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Media</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Pilih File</label>
+                        <input type="file" name="file" class="form-control" accept="image/*" required>
+                        <small class="text-muted">Format: JPG, PNG, GIF, WebP, SVG. Maksimal 5MB</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Target Path</label>
+                        <input type="text" name="targetPath" class="form-control" placeholder="/img/new-image.jpg" required>
+                        <small class="text-muted">Contoh: /img/logo/filename.png</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Preview</label>
+                        <div id="uploadPreview" class="border rounded p-3 text-center" style="min-height: 150px;">
+                            <p class="text-muted mb-0">Preview akan muncul di sini</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-cloud-upload"></i> Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Replace Modal -->
+<div class="modal fade" id="replaceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Replace Media</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="replaceForm" enctype="multipart/form-data">
+                <input type="hidden" name="targetPath" id="replaceTargetPath">
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Perhatian:</strong> File lama akan ditimpa dengan file baru. Pastikan Anda memiliki backup jika diperlukan.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">File yang akan direplace:</label>
+                        <div class="border rounded p-2 bg-light">
+                            <code id="currentFileName"></code>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Pilih File Baru</label>
+                        <input type="file" name="file" class="form-control" accept="image/*" required>
+                        <small class="text-muted">Format: JPG, PNG, GIF, WebP, SVG. Maksimal 5MB</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Preview File Baru</label>
+                        <div id="replacePreview" class="border rounded p-3 text-center" style="min-height: 150px;">
+                            <p class="text-muted mb-0">Preview akan muncul di sini</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-arrow-repeat"></i> Replace
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewTitle">Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="previewImage" src="" class="img-fluid" alt="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" onclick="copyCurrentPath()">
+                    <i class="bi bi-clipboard"></i> Copy Path
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.media-item {
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+}
+.media-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.media-preview {
+    position: relative;
+    overflow: hidden;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+}
+.media-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.media-preview:hover .media-overlay {
+    opacity: 1;
+}
+.media-info {
+    font-size: 0.85rem;
+}
+</style>
+
+<script>
+let currentPreviewPath = '';
+
+function refreshMedia() {
+    location.reload();
+}
+
+function copyPath(path) {
+    navigator.clipboard.writeText(path).then(() => {
+        showToast('Path berhasil disalin!', 'success');
+    });
+}
+
+function copyCurrentPath() {
+    if (currentPreviewPath) {
+        copyPath(currentPreviewPath);
+    }
+}
+
+function previewImage(path, name) {
+    currentPreviewPath = path;
+    document.getElementById('previewTitle').textContent = 'Preview - ' + name;
+    document.getElementById('previewImage').src = path;
+    new bootstrap.Modal(document.getElementById('previewModal')).show();
+}
+
+function replaceImage(path, name) {
+    document.getElementById('replaceTargetPath').value = path;
+    document.getElementById('currentFileName').textContent = path;
+    document.getElementById('replacePreview').innerHTML = '<p class="text-muted mb-0">Preview akan muncul di sini</p>';
+    new bootstrap.Modal(document.getElementById('replaceModal')).show();
+}
+
+function deleteImage(path) {
+    if (confirm('Apakah Anda yakin ingin menghapus file ini?')) {
+        fetch('/admin/media/delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ path: path })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('File berhasil dihapus!', 'success');
+                refreshMedia();
+            } else {
+                showToast(data.message || 'Gagal menghapus file', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Terjadi kesalahan', 'error');
+        });
+    }
+}
+
+function showToast(message, type = 'info') {
+    const toastHtml = `
+        <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'primary'} border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    
+    const toastContainer = document.createElement('div');
+    toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+    toastContainer.innerHTML = toastHtml;
+    document.body.appendChild(toastContainer);
+    
+    const toast = new bootstrap.Toast(toastContainer.querySelector('.toast'));
+    toast.show();
+    
+    setTimeout(() => {
+        document.body.removeChild(toastContainer);
+    }, 5000);
+}
+
+// Upload form handler
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('/admin/media/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('File berhasil diupload!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('uploadModal')).hide();
+            refreshMedia();
+        } else {
+            showToast(data.message || 'Gagal upload file', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Terjadi kesalahan', 'error');
+    });
+});
+
+// Replace form handler
+document.getElementById('replaceForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('/admin/media/replace', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('File berhasil direplace!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('replaceModal')).hide();
+            refreshMedia();
+        } else {
+            showToast(data.message || 'Gagal replace file', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Terjadi kesalahan', 'error');
+    });
+});
+
+// Preview for upload
+document.querySelector('#uploadModal input[type="file"]').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('uploadPreview');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" class="img-fluid" style="max-height: 200px;">`;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.innerHTML = '<p class="text-muted mb-0">Preview akan muncul di sini</p>';
+    }
+});
+
+// Preview for replace
+document.querySelector('#replaceModal input[type="file"]').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('replacePreview');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" class="img-fluid" style="max-height: 200px;">`;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.innerHTML = '<p class="text-muted mb-0">Preview akan muncul di sini</p>';
+    }
+});
+</script>

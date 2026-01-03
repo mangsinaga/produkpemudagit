@@ -639,6 +639,220 @@ router.get('/gallery/delete/:id', isAuthenticated, (req, res) => {
     res.redirect('/admin/gallery');
 });
 
+// Helper function to scan directory recursively
+const scanDirectory = (dirPath, arrayOfFiles = []) => {
+    const files = fs.readdirSync(dirPath);
+    
+    files.forEach(file => {
+        const fullPath = path.join(dirPath, file);
+        const stat = fs.statSync(fullPath);
+        
+        if (stat.isDirectory()) {
+            // Skip certain directories
+            if (!['node_modules', '.git', '.vscode', 'uploads'].includes(file)) {
+                scanDirectory(fullPath, arrayOfFiles);
+            }
+        } else {
+            // Only include image files
+            const ext = path.extname(file).toLowerCase();
+            if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'].includes(ext)) {
+                const relativePath = fullPath.replace(path.join(__dirname, '../public'), '');
+                arrayOfFiles.push({
+                    name: file,
+                    path: relativePath.replace(/\\/g, '/'), // Convert to forward slashes
+                    fullPath: fullPath,
+                    size: stat.size,
+                    modified: stat.mtime,
+                    ext: ext
+                });
+            }
+        }
+    });
+    
+    return arrayOfFiles;
+};
+
+// Media Manager CRUD
+router.get('/media', isAuthenticated, (req, res) => {
+    const imgPath = path.join(__dirname, '../public/img');
+    
+    try {
+        const mediaFiles = scanDirectory(imgPath);
+        
+        // Sort by modified date (newest first)
+        mediaFiles.sort((a, b) => b.modified - a.modified);
+        
+        // Group files by directory
+        const groupedFiles = {};
+        mediaFiles.forEach(file => {
+            const dir = path.dirname(file.path);
+            if (!groupedFiles[dir]) {
+                groupedFiles[dir] = [];
+            }
+            groupedFiles[dir].push(file);
+        });
+        
+        res.render('admin/media/index', {
+            layout: 'admin/layout',
+            admin: req.session.admin,
+            mediaFiles: groupedFiles,
+            totalFiles: mediaFiles.length
+        });
+    } catch (error) {
+        console.error('Error scanning media directory:', error);
+        res.render('admin/media/index', {
+            layout: 'admin/layout',
+            admin: req.session.admin,
+            mediaFiles: {},
+            totalFiles: 0,
+            error: 'Failed to scan media directory'
+        });
+    }
+});
+
+router.post('/media/upload', isAuthenticated, (req, res) => {
+    const { targetPath } = req.body;
+    
+    if (!req.files || !req.files.file) {
+        return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+    
+    if (!targetPath) {
+        return res.status(400).json({ success: false, message: 'Target path not specified' });
+    }
+    
+    const uploadedFile = req.files.file;
+    const fullPath = path.join(__dirname, '../public', targetPath);
+    
+    try {
+        // Ensure directory exists
+        const dir = path.dirname(fullPath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        
+        // Move file to target location
+        uploadedFile.mv(fullPath, (err) => {
+            if (err) {
+                console.error('Upload error:', err);
+                return res.status(500).json({ 
+                    success: false, 
+                    message: 'Failed to upload file' 
+                });
+            }
+            
+            res.json({ 
+                success: true, 
+                message: 'File uploaded successfully',
+                path: targetPath
+            });
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error' 
+        });
+    }
+});
+
+router.post('/media/replace', isAuthenticated, (req, res) => {
+    const { targetPath } = req.body;
+    
+    if (!req.files || !req.files.file) {
+        return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+    
+    if (!targetPath) {
+        return res.status(400).json({ success: false, message: 'Target path not specified' });
+    }
+    
+    const uploadedFile = req.files.file;
+    const fullPath = path.join(__dirname, '../public', targetPath);
+    
+    try {
+        // Check if file exists
+        if (!fs.existsSync(fullPath)) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Target file not found' 
+            });
+        }
+        
+        // Backup original file
+        const backupPath = fullPath + '.backup.' + Date.now();
+        fs.copyFileSync(fullPath, backupPath);
+        
+        // Replace file
+        uploadedFile.mv(fullPath, (err) => {
+            if (err) {
+                console.error('Replace error:', err);
+                // Restore from backup if replacement fails
+                if (fs.existsSync(backupPath)) {
+                    fs.copyFileSync(backupPath, fullPath);
+                    fs.unlinkSync(backupPath);
+                }
+                return res.status(500).json({ 
+                    success: false, 
+                    message: 'Failed to replace file' 
+                });
+            }
+            
+            // Remove backup after successful replacement
+            fs.unlinkSync(backupPath);
+            
+            res.json({ 
+                success: true, 
+                message: 'File replaced successfully',
+                path: targetPath
+            });
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error' 
+        });
+    }
+});
+
+router.delete('/media/delete', isAuthenticated, (req, res) => {
+    const { path: filePath } = req.body;
+    
+    if (!filePath) {
+        return res.status(400).json({ 
+            success: false, 
+            message: 'File path not specified' 
+        });
+    }
+    
+    const fullPath = path.join(__dirname, '../public', filePath);
+    
+    try {
+        // Check if file exists
+        if (!fs.existsSync(fullPath)) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'File not found' 
+            });
+        }
+        
+        // Delete file
+        fs.unlinkSync(fullPath);
+        
+        res.json({ 
+            success: true, 
+            message: 'File deleted successfully' 
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Failed to delete file' 
+        });
+    }
+});
+
 // Services CRUD
 router.get('/services', isAuthenticated, (req, res) => {
     const services = readJSON('services.json');
